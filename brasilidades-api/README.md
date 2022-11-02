@@ -1,0 +1,3 @@
+| Method | Endpoint                   | Payload                                                                                                                                                                           | Response      | Action             |
+| ------ | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------ |
+| POST   | /personalities/:regionName | {<br>name: String,<br>description: String,<br>area:\[String\],<br>birthDay: String(AAAA-MM-DD),<br>deceased: String(AAAA-MM-DD),<br>wikipediaUrl: String<br>imageUrl: String<br>} | {Personality} | Create Presonality |

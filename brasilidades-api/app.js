@@ -1,6 +1,8 @@
 require('dotenv').config()
 
 const express = require('express')
+const personalitiesRoutes = require('./routes/personalities.routes.js')
+const musicRoutes = require('./routes/musics.routes.js')
 
 const app = express()
 
@@ -12,10 +14,8 @@ app.use(express.json())
 
 // Rotas
 
-app.get('/', (req, res) => {
-  res.json({ msg: 'Connected' })
-})
-
+app.use('/', personalitiesRoutes)
+app.use('/', musicRoutes)
 //listen
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on Port ${process.env.PORT}`)
