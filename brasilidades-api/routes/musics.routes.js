@@ -4,7 +4,7 @@ const Region = require('../models/Region.model')
 
 const router = Router()
 
-router.post('/music/:regionName', async (req, res) => {
+router.post('/music/:regionName', async (req, res, next) => {
   const { regionName } = req.params
   try {
     const region = await Region.findOne({ title: regionName })
@@ -19,7 +19,7 @@ router.post('/music/:regionName', async (req, res) => {
 
     res.status(201).json(newMusic)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 

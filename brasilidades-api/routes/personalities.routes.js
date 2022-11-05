@@ -4,7 +4,7 @@ const Region = require('../models/Region.model')
 
 const router = Router()
 
-router.post('/personalities/:regionName', async (req, res) => {
+router.post('/personalities/:regionName', async (req, res, next) => {
   const { regionName } = req.params
   try {
     const region = await Region.findOne({ title: regionName })
@@ -20,11 +20,11 @@ router.post('/personalities/:regionName', async (req, res) => {
 
     res.status(200).json(newPersonality)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
-router.get('/personalities/:regionName', async (req, res) => {
+router.get('/personalities/:regionName', async (req, res, next) => {
   const { regionName } = req.params
   try {
     const region = await Region.findOne({ title: regionName })
@@ -32,10 +32,12 @@ router.get('/personalities/:regionName', async (req, res) => {
       return res.status(404).json({ msg: 'Region not found' })
     }
 
-    const personalities = await Personality.find({ regionId: region._id })
+    const personalities = await Personality.find({
+      regionId: region._id,
+    }).populate('regionId')
     res.status(200).json(personalities)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
