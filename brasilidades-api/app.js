@@ -6,6 +6,7 @@ const cors = require('cors')
 const personalitiesRoutes = require('./routes/personalities.routes.js')
 const musicRoutes = require('./routes/musics.routes.js')
 const authRoutes = require('./routes/auth.routes.js')
+const commentsRoutes = require('./routes/comments.routes')
 
 const app = express()
 
@@ -28,7 +29,6 @@ require('./db/index.js')()
 // )
 
 // usando lib e liberando para qualquer dominio
-
 app.use(cors())
 
 //Em desenvolvimento show app logs
@@ -37,15 +37,19 @@ app.use(logger('dev'))
 // Utilizar o json body das requisições
 app.use(express.json())
 
-// Rotas
-
+// Rotas Publicas antes do middleware de authenticação
 app.use('/', authRoutes)
-app.use('/', personalitiesRoutes)
+
+// middleware de autenticação
+app.use(require('./middlewares/auth.middleware'))
+
+// Rotas Privadas
 app.use('/', musicRoutes)
-//listen
+app.use('/', personalitiesRoutes)
+app.use('/', commentsRoutes)
 
 require('./error-handling')(app)
-
+//listen
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on Port ${process.env.PORT}`)
 })

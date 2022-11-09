@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const User = require('../models/User.model')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const router = Router()
 
@@ -54,6 +55,33 @@ router.post('/signup', async (req, res, next) => {
     const { _id } = createdUser
 
     res.status(201).json({ email, name, _id })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/login', async (req, res, next) => {
+  const { email, password } = req.body
+  try {
+    const user = await User.findOne({ email })
+    if (!user) {
+      res.status(400).json({ message: 'user not found' })
+      return
+    }
+    const compareHash = bcrypt.compareSync(password, user.passwordHash)
+
+    if (!compareHash) {
+      res.status(401).json({ message: 'invalid password' })
+      return
+    }
+
+    const payload = {
+      id: user._id,
+      email: user.email,
+    }
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' })
+    res.status(200).json({ ...payload, token })
   } catch (error) {
     next(error)
   }
