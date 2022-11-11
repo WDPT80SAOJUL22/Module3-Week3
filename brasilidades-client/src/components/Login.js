@@ -31,14 +31,14 @@ const Login = () => {
     <div>
       {message !== '' && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
-        <label>Email</label>
+        <label>Email: </label>
         <input
           type='text'
           name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <label>Passwordl</label>
+        <label>Password: </label>
         <input
           type='password'
           name='password'
