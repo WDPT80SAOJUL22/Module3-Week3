@@ -50,6 +50,20 @@ class Api {
       console.log(error)
     }
   }
+
+  uploadImage = async (id, file) => {
+    const formData = new FormData()
+    formData.append('image', file)
+    try {
+      const { data } = await this.api.put(
+        `/personalities/${id}/image-upload`,
+        formData
+      )
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default new Api()
